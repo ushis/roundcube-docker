@@ -12,8 +12,8 @@ RUN apt-get update && \
   a2enmod rewrite deflate headers expires
 
 RUN rm -rf /var/www/html && \
-  curl -L https://github.com/roundcube/roundcubemail/releases/download/1.2.0/roundcubemail-1.2.0-complete.tar.gz | tar -C /var/www -xzf - && \
-  mv /var/www/roundcubemail-1.2.0 /var/www/html && \
+  curl -L https://github.com/roundcube/roundcubemail/releases/download/1.2.1/roundcubemail-1.2.1-complete.tar.gz | tar -C /var/www -xzf - && \
+  mv /var/www/roundcubemail-1.2.1 /var/www/html && \
   chown root:www-data /var/www/html && \
   chown -R root:root /var/www/html/* && \
   chown -R root:www-data /var/www/html/.htaccess \

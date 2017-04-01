@@ -1,0 +1,29 @@
+---
+sudo: false
+
+services:
+  - docker
+
+script:
+  - docker build -t roundcube .
+
+before_deploy:
+  - if test -n "${TRAVIS_TAG}"; then
+      docker tag roundcube "ushi/roundcube:${TRAVIS_TAG}";
+    else
+      docker tag roundcube "ushi/roundcube:latest";
+    fi
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: docker push "ushi/roundcube:${TRAVIS_TAG}"
+    on:
+      tags: true
+
+  - provider: script
+    skip_cleanup: true
+    script: docker push "ushi/roundcube:latest"
+    on:
+      branch: master

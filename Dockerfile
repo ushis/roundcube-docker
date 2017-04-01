@@ -1,31 +1,43 @@
-FROM php:apache
+FROM alpine:3.5
 
-RUN apt-get update && \
-  apt-get install -y --no-install-recommends \
-    libpq-dev \
-    libicu-dev \
-    libldap2-dev && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/* && \
-  docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu && \
-  docker-php-ext-install pdo pdo_mysql pdo_pgsql zip intl exif ldap && \
-  a2enmod rewrite deflate headers expires
+RUN apk add --no-cache \
+  apache2 \
+  curl \
+  php5-apache2 \
+  php5-dom \
+  php5-exif \
+  php5-iconv \
+  php5-intl \
+  php5-json \
+  php5-ldap \
+  php5-openssl \
+  php5-pdo_mysql \
+  php5-pdo_pgsql \
+  php5-pgsql \
+  php5-pspell \
+  php5-sockets \
+  php5-xml \
+  php5-zip
 
-RUN rm -rf /var/www/html && \
-  curl -L https://github.com/roundcube/roundcubemail/releases/download/1.2.3/roundcubemail-1.2.3-complete.tar.gz | tar -C /var/www -xzf - && \
-  mv /var/www/roundcubemail-1.2.3 /var/www/html && \
-  chown root:www-data /var/www/html && \
-  chown -R root:root /var/www/html/* && \
-  chown -R root:www-data /var/www/html/.htaccess \
-    /var/www/html/index.php \
-    /var/www/html/robots.txt \
-    /var/www/html/config \
-    /var/www/html/logs \
-    /var/www/html/plugins \
-    /var/www/html/program \
-    /var/www/html/skins \
-    /var/www/html/temp \
-    /var/www/html/vendor && \
-  find /var/www/html -type d -exec chmod 0750 {} \; && \
-  find /var/www/html -type f -exec chmod 0640 {} \; && \
-  chmod -R 0770 /var/www/html/logs /var/www/html/temp
+RUN curl -L https://github.com/roundcube/roundcubemail/releases/download/1.2.4/roundcubemail-1.2.4-complete.tar.gz | \
+    tar -C /srv -xzf - && \
+  mv /srv/roundcubemail-1.2.4 /srv/roundcube && \
+  chown root:www-data /srv/roundcube && \
+  chown -R root:root /srv/roundcube/* && \
+  chown -R root:www-data /srv/roundcube/.htaccess \
+    /srv/roundcube/index.php \
+    /srv/roundcube/robots.txt \
+    /srv/roundcube/config \
+    /srv/roundcube/logs \
+    /srv/roundcube/plugins \
+    /srv/roundcube/program \
+    /srv/roundcube/skins \
+    /srv/roundcube/temp \
+    /srv/roundcube/vendor && \
+  find /srv/roundcube -type d -exec chmod 0750 {} \; && \
+  find /srv/roundcube -type f -exec chmod 0640 {} \; && \
+  chmod -R 0770 /srv/roundcube/logs /srv/roundcube/temp
+
+COPY httpd.conf /etc/apache2/conf.d/overrides.conf
+
+CMD httpd -DFOREGROUND

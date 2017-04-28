@@ -19,9 +19,9 @@ RUN apk add --no-cache \
   php5-xml \
   php5-zip
 
-RUN curl -L https://github.com/roundcube/roundcubemail/releases/download/1.2.4/roundcubemail-1.2.4-complete.tar.gz | \
+RUN curl -L https://github.com/roundcube/roundcubemail/releases/download/1.2.5/roundcubemail-1.2.5-complete.tar.gz | \
     tar -C /srv -xzf - && \
-  mv /srv/roundcubemail-1.2.4 /srv/roundcube && \
+  mv /srv/roundcubemail-1.2.5 /srv/roundcube && \
   chown root:www-data /srv/roundcube && \
   chown -R root:root /srv/roundcube/* && \
   chown -R root:www-data /srv/roundcube/.htaccess \

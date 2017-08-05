@@ -1,23 +1,28 @@
-FROM alpine:3.5
+FROM alpine:3.6
 
 RUN apk add --no-cache \
   apache2 \
   curl \
-  php5-apache2 \
-  php5-dom \
-  php5-exif \
-  php5-iconv \
-  php5-intl \
-  php5-json \
-  php5-ldap \
-  php5-openssl \
-  php5-pdo_mysql \
-  php5-pdo_pgsql \
-  php5-pgsql \
-  php5-pspell \
-  php5-sockets \
-  php5-xml \
-  php5-zip
+  php7 \
+  php7-apache2 \
+  php7-dom \
+  php7-exif \
+  php7-fileinfo \
+  php7-iconv \
+  php7-intl \
+  php7-json \
+  php7-ldap \
+  php7-mbstring \
+  php7-openssl \
+  php7-pdo_mysql \
+  php7-pdo_pgsql \
+  php7-openssl \
+  php7-pgsql \
+  php7-pspell \
+  php7-session \
+  php7-sockets \
+  php7-xml \
+  php7-zip
 
 RUN curl -L https://github.com/roundcube/roundcubemail/releases/download/1.3.0/roundcubemail-1.3.0-complete.tar.gz | \
     tar -C /srv -xzf - && \

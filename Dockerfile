@@ -1,5 +1,7 @@
 FROM alpine:3.6
 
+ARG ROUNDCUBE_VERSION=1.3.1
+
 RUN apk add --no-cache \
   apache2 \
   curl \
@@ -24,9 +26,9 @@ RUN apk add --no-cache \
   php7-xml \
   php7-zip
 
-RUN curl -L https://github.com/roundcube/roundcubemail/releases/download/1.3.0/roundcubemail-1.3.0-complete.tar.gz | \
+RUN curl -L https://github.com/roundcube/roundcubemail/releases/download/$ROUNDCUBE_VERSION/roundcubemail-$ROUNDCUBE_VERSION-complete.tar.gz | \
     tar -C /srv -xzf - && \
-  mv /srv/roundcubemail-1.3.0 /srv/roundcube && \
+  mv /srv/roundcubemail-$ROUNDCUBE_VERSION /srv/roundcube && \
   chown root:www-data /srv/roundcube && \
   chown -R root:root /srv/roundcube/* && \
   chown -R root:www-data \

@@ -1,6 +1,6 @@
 FROM alpine:3.6
 
-ARG ROUNDCUBE_VERSION=1.3.1
+ARG ROUNDCUBE_VERSION=1.3.3
 
 RUN apk add --no-cache \
   apache2 \

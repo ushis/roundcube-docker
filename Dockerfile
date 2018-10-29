@@ -1,6 +1,6 @@
 FROM alpine:3.6
 
-ARG ROUNDCUBE_VERSION=1.3.7
+ARG ROUNDCUBE_VERSION=1.3.8
 
 RUN apk add --no-cache \
   apache2 \
@@ -32,6 +32,7 @@ RUN curl -L https://github.com/roundcube/roundcubemail/releases/download/$ROUNDC
   chown root:www-data /srv/roundcube && \
   chown -R root:root /srv/roundcube/* && \
   chown -R root:www-data \
+    /srv/roundcube/.htaccess \
     /srv/roundcube/index.php \
     /srv/roundcube/config \
     /srv/roundcube/logs \

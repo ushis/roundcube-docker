@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM alpine:3.10
 
 ARG ROUNDCUBE_VERSION=1.3.9
 

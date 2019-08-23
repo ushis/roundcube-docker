@@ -1,7 +1,5 @@
 FROM alpine:3.10
 
-ARG ROUNDCUBE_VERSION=1.3.9
-
 RUN apk add --no-cache \
   apache2 \
   curl \
@@ -26,9 +24,20 @@ RUN apk add --no-cache \
   php7-xml \
   php7-zip
 
-RUN curl -L https://github.com/roundcube/roundcubemail/releases/download/$ROUNDCUBE_VERSION/roundcubemail-$ROUNDCUBE_VERSION-complete.tar.gz | \
-    tar -C /srv -xzf - && \
-  mv /srv/roundcubemail-$ROUNDCUBE_VERSION /srv/roundcube && \
+COPY httpd.conf /etc/apache2/conf.d/overrides.conf
+COPY roundcube.asc /srv/roundcube.asc
+
+ARG ROUNDCUBE_VERSION
+
+RUN apk add --no-cache gnupg && \
+  curl -fLO "https://github.com/roundcube/roundcubemail/releases/download/${ROUNDCUBE_VERSION}/roundcubemail-${ROUNDCUBE_VERSION}-complete.tar.gz" && \
+  curl -fLO "https://github.com/roundcube/roundcubemail/releases/download/${ROUNDCUBE_VERSION}/roundcubemail-${ROUNDCUBE_VERSION}-complete.tar.gz.asc" && \
+  gpg --import /srv/roundcube.asc && \
+  gpg --verify "roundcubemail-${ROUNDCUBE_VERSION}-complete.tar.gz.asc" "roundcubemail-${ROUNDCUBE_VERSION}-complete.tar.gz" && \
+  tar -C /srv -xzf "roundcubemail-${ROUNDCUBE_VERSION}-complete.tar.gz" && \
+  rm "roundcubemail-${ROUNDCUBE_VERSION}-complete.tar.gz" "roundcubemail-${ROUNDCUBE_VERSION}-complete.tar.gz.asc" && \
+  apk del gnupg && \
+  mv "/srv/roundcubemail-${ROUNDCUBE_VERSION}" /srv/roundcube && \
   chown root:www-data /srv/roundcube && \
   chown -R root:root /srv/roundcube/* && \
   chown -R root:www-data \
@@ -44,7 +53,5 @@ RUN curl -L https://github.com/roundcube/roundcubemail/releases/download/$ROUNDC
   find /srv/roundcube -type d -exec chmod 0750 {} \; && \
   find /srv/roundcube -type f -exec chmod 0640 {} \; && \
   chmod -R 0770 /srv/roundcube/logs /srv/roundcube/temp
-
-COPY httpd.conf /etc/apache2/conf.d/overrides.conf
 
 CMD httpd -DFOREGROUND

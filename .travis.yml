@@ -1,11 +1,15 @@
 ---
 sudo: false
 
+env:
+  global:
+    - ROUNDCUBE_VERSION="$(<version)"
+
 services:
   - docker
 
 script:
-  - docker build -t roundcube .
+  - docker build --build-arg "ROUNDCUBE_VERSION=${ROUNDCUBE_VERSION}" -t roundcube .
 
 before_deploy:
   - if test -n "${TRAVIS_TAG}"; then

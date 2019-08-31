@@ -15,15 +15,15 @@ before_script:
   - snyk auth "${SNYK_API_TOKEN}"
 
 script:
-  - docker build --build-arg "ROUNDCUBE_VERSION=${ROUNDCUBE_VERSION}" -t roundcube .
-  - snyk test --docker roundcube
+  - docker build --build-arg "ROUNDCUBE_VERSION=${ROUNDCUBE_VERSION}" -t ushi/roundcube .
+  - snyk test --docker ushi/roundcube
 
 before_deploy:
   - if test -n "${TRAVIS_TAG}"; then
-      docker tag roundcube "ushi/roundcube:${TRAVIS_TAG}" &&
+      docker tag ushi/roundcube "ushi/roundcube:${TRAVIS_TAG}" &&
         snyk monitor --docker "ushi/roundcube:${TRAVIS_TAG}";
     else
-      docker tag roundcube "ushi/roundcube:latest";
+      docker tag ushi/roundcube "ushi/roundcube:latest";
     fi
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
 

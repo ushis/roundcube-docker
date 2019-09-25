@@ -1,3 +1,1 @@
-# Editor
-*.swo
-*.swp
+/node_modules
